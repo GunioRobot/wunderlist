@@ -24,12 +24,12 @@ var listShortcutListener = 0;
  */
 bindListAddMode = function() {
 	$('.addlist').live('click', function() {
-		
+
 		if (settings.sidebar_opened_status == 'false')
 		{
 			$('div#right span.togglesidebar').click();
 		}
-	
+
 		addList();
 		makeListsSortable();
     });
@@ -74,7 +74,7 @@ bindListEditMode = function() {
 	});
 
 	$('#lists a.list').live('dblclick', function() {
-	
+
 		if($(this).children('input').length == 0)
 		{
 			$(this).children('div.editp').hide();
@@ -132,7 +132,7 @@ bindListSaveMode = function() {
 saveList = function(listElement) {
 	var listElementInput = listElement.children('input');
 	var listElementTitle = listElement.children('b');
-	
+
     var listElementName  = wunderlist.strip_tags(wunderlist.database.convertString(listElementInput.val()));
 
 	if (listElementName == '')
@@ -140,17 +140,17 @@ saveList = function(listElement) {
 
 	if (listElement.hasClass('ui-state-disabled'))
 		$('#content h1').text(unescape(listElementName));
-	
+
 	listElementInput.remove();
-	
+
 	var listElementTitleSplit = listElementTitle.html().split("<");
 	newTitle = unescape(listElementName) + "<" + listElementTitleSplit[1];
 	listElementTitle.html(newTitle).fadeIn();
-	
+
 	list.id   = listElement.attr('id').replace('list', '');
 	list.name = listElementName;
 	list.update();
-	
+
 	listElement.children('.savep').hide();
 	listElement.children('.deletep').hide();
 
@@ -190,7 +190,7 @@ saveNewList = function(listElement) {
 
 	if (listElementName == '')
 		listElementName = wunderlist.language.data.new_list;
-	
+
 	list.name  = listElementName;
 	var listId = list.insert();
 
@@ -211,7 +211,7 @@ saveNewList = function(listElement) {
     makeListsDropable();
 
     listElement.click();
-    
+
     if (wunderlist.account.isLoggedIn() == false)
     {
     	$('div.sharelist').remove();
@@ -228,21 +228,21 @@ deleteList = function(listId, listElement) {
 
 	if (listElement == undefined)
 		listElement = $('div#lists a.ui-state-disabled');
-	
+
 	if (listId == undefined)
 		listId = (listElement.attr('id') != undefined) ? listElement.attr('id').replace('list', '') : undefined;
 
 	if (listId != undefined && listId != 1)
 	{
 		if (listId != 'x')
-		{			
+		{
 			list.id      = listId;
 			list.deleted = 1;
 			list.update();
 		}
-	
+
 		listElement.remove();
-	
+
 		openList(1);
 	}
 };
@@ -278,43 +278,43 @@ openList = function(list_id) {
 	if (listOpenHandler === false)
 	{
 		listOpenHandler = true;
-	
+
 		// Clear content
 		var content = $('#content');
 		content.html('').hide();
-	
+
 		if (list_id == undefined)
 			list_id = settings.load_last_opened_list(); // Default 1
-	
+
 		if (wunderlist.database.existsById('lists', list_id) == false)
 			list_id = 1;
-	
+
 		var dbList  = wunderlist.database.getLists(list_id);
 		var dbTasks = wunderlist.database.getTasks(undefined, list_id);
-		
+
 		$('#content').append(html.generateListContentHTML(dbList[0].id, dbList[0].name));
 		$("#list").append(wunderlist.database.initTasks(dbTasks));
 
 		makeSortable();
-		
+
 		wunderlist.database.getLastDoneTasks(list_id);
-	
+
 		html.make_timestamp_to_string();
-	
+
 		settings.save_last_opened_list(list_id);
 		html.createDatepicker();
 		wunderlist.timer.resume();
 		Search.clear();
-	    
+
 		// Make everything droppable
 		$("a.list").droppable({ disabled: false });
 		$("#lists a#list" + list_id).droppable({ disabled: true }); // Activate list
 		$('#bottombar #left a').removeClass('active');
-	    
+
 		content.fadeIn('fast');
-		
+
 		setTimeout(function() { listOpenHandler = false }, 100);
-		
+
 		// If there is another list in edit mode, save it after opening the other list
         if ($('a.list input').length == 1)
         {
@@ -358,7 +358,7 @@ saveListPosition = function() {
             list.id       = lists.eq(i).attr("id").replace('list', '');
             list.position = i + 1;
             list.update();
-            
+
             i++;
         }
     });
@@ -414,13 +414,13 @@ $(function() {
 	$('a.list input').live('keyup', function(event) {
 		wunderlist.timer.pause();
 		var aimSetting = parseInt(Titanium.App.Properties.getString('add_item_method', '0'));
-		
+
 		if (event.keyCode == 13 && aimSetting == 0)
 		{
 			listEventListener = true;
 			var listElement = $(this).parent('a');
-			var list_id     = listElement.attr('id').replace('list', '');	
-			
+			var list_id     = listElement.attr('id').replace('list', '');
+
 			wunderlist.timer.resume();
 
 			if (list_id != 'x')
@@ -445,15 +445,15 @@ $(function() {
 				var listId      = listElement.attr('id').replace('list', '');
 
 				wunderlist.timer.resume();
-                
+
 				if (listId != 'x')
 					saveList(listElement);
 				else
 					saveNewList(listElement);
-	
+
 				listElement.children('.editp').hide();
 				listElement.children('.deletep').hide();
-				
+
 				setTimeout(function() { listEventListener = false }, 500);
 			/*}
 			else
@@ -478,7 +478,7 @@ $(function() {
 		$('#older_tasks').slideDown(function() {
 			$('button#hide_older_tasks').fadeIn();
 		});
-		
+
 		$(this).hide();
 	});
 
@@ -487,7 +487,7 @@ $(function() {
 		$('#older_tasks').slideUp(function() {
 			$('button#older_tasks_head').fadeIn();
 		});
-		
+
 		$(this).hide();
 	});
 });

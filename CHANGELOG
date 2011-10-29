@@ -89,7 +89,7 @@ New: Current task date is now selected when opening the datepicker
 Fix: Improved search, unchecked tasks are now appended to the end of the list
 Fix: Tabulator on checkboxes is not possible anymore
 Fix: Improved English, Russian, Italian and Spanish translation files
-Fix: Badges now show today and overdue 
+Fix: Badges now show today and overdue
 Fix: Login / Logout Bug
 
 23.11.2010

@@ -13,7 +13,7 @@ wunderlist.updater.checkVersion = function() {
 			var response   = JSON.parse(xhrobject.responseText);
 			var curVersion = parseInt(wunderlist.str_replace('.', '', wunderlist.version))
 			var newVersion = parseInt(wunderlist.str_replace('.', '', response.version))
-			
+
 			if (response.version != undefined && curVersion != newVersion && newVersion > curVersion)
 			{
 				var updateHTML = '<p>' + wunderlist.replace_links(response.message) + '</p>';

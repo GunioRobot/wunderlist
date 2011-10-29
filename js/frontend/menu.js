@@ -7,7 +7,7 @@ var menu = menu || {};
  */
 menu.reset_window_size = function() {
 	var currentWindow = Titanium.UI.getCurrentWindow();
-	
+
 	currentWindow.height = 400;
 	currentWindow.width  = 600;
 	currentWindow.x      = Math.round((screen.width / 2) - 300);
@@ -60,7 +60,7 @@ menu.initialize = function() {
 	languageMenuItem.addItem('Српска',     function() {menu.switch_language('sr')});
 	languageMenuItem.addItem('Galego',     function() {menu.switch_language('gl')});
 	languageMenuItem.addItem('Română',     function() {menu.switch_language('ro')});
-	languageMenuItem.addItem('Português (Brazilian)',     function() {menu.switch_language('pt-br')});	
+	languageMenuItem.addItem('Português (Brazilian)',     function() {menu.switch_language('pt-br')});
 
 	extraMenuItem.addItem(wunderlist.language.data.add_item_method, dialogs.openSelectAddItemMethodDialog);
 	extraMenuItem.addItem(wunderlist.language.data.switchdateformat, dialogs.openSwitchDateFormatDialog);
@@ -135,7 +135,7 @@ menu.initializeTrayIcon = function() {
 			var trayIconPath = Titanium.API.Application.getResourcesPath() + '/images/traywin.png';
 		else
 			var trayIconPath = Titanium.API.Application.getResourcesPath() + '/images/traymac.png';
-		
+
 		// Show the window again in windows and linux, when clicking the tray icon
 		if (os != 'darwin')
 		{
@@ -151,13 +151,13 @@ menu.initializeTrayIcon = function() {
 
 		var trayMenu         = Titanium.UI.createMenu();
 		var trayExitItem	 = trayMenu.addItem(wunderlist.language.data.exit_wunderlist, menu.exitWunderlist);
-		
+
 		trayIcon.setMenu(trayMenu);*/
 
 		if (os == 'darwin')
 		{
 			Titanium.on("reopen", function (e) {
-				if (!e.hasVisibleWindows) 
+				if (!e.hasVisibleWindows)
 				{
 					wunderlistWindow.show();
 					e.preventDefault();
@@ -167,15 +167,15 @@ menu.initializeTrayIcon = function() {
 	}
 	else
 	{
-		var wunderlistWindow = Titanium.UI.getCurrentWindow();	
-	
+		var wunderlistWindow = Titanium.UI.getCurrentWindow();
+
 		wunderlistWindow.addEventListener(Titanium.CLOSE, function(event) {
-			if (wunderlist.account.isLoggedIn() == true) 
+			if (wunderlist.account.isLoggedIn() == true)
 			{
 				wunderlist.sync.fireSync(false, true);
 				event.stopPropagation();
 			}
-		});	
+		});
 	}
 }
 
@@ -197,7 +197,7 @@ menu.exitWunderlist = function() {
 
 	//Titanium.UI.Tray.remove();
 }
- 
+
 
 /**
  * Prevent standard close event

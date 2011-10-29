@@ -19,7 +19,7 @@ var syncShortcutListener = 0;
  *
  * @author Marvin Labod
  */
- 
+
 registerProcess = function() {
 
 	// Show and Hide Register Dialog
@@ -31,16 +31,16 @@ registerProcess = function() {
 		$(".showregisterdialog").fadeIn("slow");
 		$("#account-loader").hide();
 	});
-	
+
 	$("#showloginsubmit").live("click",function(){
 		$('input.input-red').removeClass('input-red');
 		$('div.errorwrap p').text('');
 		$(".dialog-login .ui-dialog-title").text(wunderlist.language.data.register_title);
 		$(".showregisterdialog").hide();
-		$(".showlogindialog").fadeIn("slow");	
+		$(".showlogindialog").fadeIn("slow");
 		$("#account-loader").hide();
 	});
-	
+
 	// Show and Hide Forgot PW Dialog
 	$("#showforgotpw").live("click",function(){
 		$('input.input-red').removeClass('input-red');
@@ -50,13 +50,13 @@ registerProcess = function() {
 		$(".forgotpwbuttons").fadeIn();
 		$("#account-loader").hide();
 	});
-	
+
 	$("#cancelforgotpw").live("click",function(){
 		$(".forgotpwbuttons .errorwrap").hide();
 		$("#forgotpw-email").val("");
 		$(".dialog-login .ui-dialog-title").text(wunderlist.language.data.register_title);
 		$(".forgotpwbuttons").hide();
-		$(".loginbuttons").fadeIn();	
+		$(".loginbuttons").fadeIn();
 	});
 };
 
@@ -66,7 +66,7 @@ registerProcess = function() {
  *
  * @author Marvin Labod
  */
- 
+
 toolTips = function() {
 	$("a.more, span.more, #listfunctions a").live("mouseenter", function(e) {
 		var content = $(this).attr("rel");
@@ -74,36 +74,36 @@ toolTips = function() {
 		var width = $(this).width();
 
 		$("body").append("<p id='tooltip'>"+ content +"</p>");
-		
+
 		var tipWidth = $("#tooltip").width();
-		
+
 		if($(this).attr("id") == "sync"){tipWidth = "36";}
 
 		$("#tooltip").css("top",(offset.top-35) + "px").css("left",(offset.left-tipWidth/2) + "px").fadeIn("fast");
-				
+
 		if($(this).parent().attr("id") == "listfunctions") {
 			$("#tooltip").css("top",(offset.top+25));
 		}
-		
+
 		if(settings.getSidebarPosition() == "left") {
-					
+
 			if(e.target.className == "list-cloud") {
 				$("#tooltip").css("left",(offset.left-40-tipWidth/2) + "px");
 			}
 		}
-		
+
 		if ($("#cloudtip:visible").length == 1 && $(this).parent().attr("id") == "listfunctions") {
 			$("#tooltip").hide();
 		}
-		
+
 		if($(this).parent().attr("id") == "left") {
 			$("#tooltip").css("left",(offset.left+17-tipWidth/2) + "px");
 		}
 	});
-		
+
 	$("a.more, span.more, #listfunctions a").live("mouseleave", function(e) {
 		$("#tooltip").remove();
-	});	
+	});
 };
 
 var rotationTimer = 0;
@@ -119,11 +119,11 @@ startSyncAnimation = function() {
 	$('#tooltip').remove();
 	$("body").append("<p id='sync_tooltip'>" + wunderlist.language.data.sync + "</p>");
 	$("#sync_tooltip").css("bottom",41 + "px").css("left",7 + "px");
-	
+
 	if(settings.getSidebarPosition() == "left") {
 		$("#sync_tooltip").css("bottom",41 + "px").css("left",275 + "px");
 	}
-	
+
 	$("#sync_tooltip").fadeIn("fast");
 
     rotate(0);
@@ -184,7 +184,7 @@ switchSyncSymbol = function(status) {
 $(document).ready(function() {
 
     toolTips();
-    
+
     registerProcess();
 
 	sidebar.init();
@@ -207,11 +207,11 @@ $(document).ready(function() {
 	runtime = Titanium.App.Properties.getString('runtime');
 	if(runtime % 10 == 0 && settings.invited == 'false')
 		wunderlist.account.showInviteDialog();
-	
+
 	$('a.showhelp').bind('click', function() {
 		dialogs.showHelpDialog();
 	});
-	
+
 	$(".wklogo").mouseenter(function(){
 		$(this).fadeOut();
 		$(".followus").fadeIn();

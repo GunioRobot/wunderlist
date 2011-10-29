@@ -2,7 +2,7 @@
  * wunderlist.wunderlist.timer.js
  *
  * Class for handling date and time functionality
- * 
+ *
  * @author Christian Reber, Dennis Schneider, Daniel Marschner, Sebastian Kreutzberger
  */
 
@@ -31,21 +31,21 @@ wunderlist.timer.init = function()
 			}
 		}
 	}, 1000);
-	
+
 	// check every 10 seconds if day changed (overnight)
 	this.former_date = 0; //init
 	this.daychange_interval = setInterval(function()
 	{
 		var current_date = wunderlist.timer.current_date();
-		if(this.former_date != current_date && this.former_date != 0 && typeof(this.former_date) != "undefined") 
+		if(this.former_date != current_date && this.former_date != 0 && typeof(this.former_date) != "undefined")
 		{
 			wunderlist.account.loadInterface();
 		}
 		this.former_date = current_date;
-		
+
 	}, 10000);
-	
-	
+
+
 	return this;
 };
 

@@ -4,12 +4,12 @@ share.init = function() {
 	$('#listfunctions a.list-email').live("click", share.share_by_email);
 	$('#listfunctions a.list-cloud').live("click", dialogs.showCloudAppDialog);
 	$('#listfunctions a.list-print').live("click", share.print);
-	
+
 	// Open URL on click
 	$('#cloudtip span.link').live("click", function() {
 		Titanium.Desktop.openURL($(this).text());
 	});
-	
+
 	// Copy Link into clipboard
 	$('#cloudtip span.copy').live("click", function() {
 		Titanium.UI.Clipboard.setText($('#cloudtip span.link').text());
@@ -24,7 +24,7 @@ share.init = function() {
 share.share_by_email = function() {
 	// Get All Tasks
 	var sharingTasks = $('ul.mainlist li');
-	
+
 	if (sharingTasks.length > 0)
 	{
 		// Generate List Name
@@ -37,14 +37,14 @@ share.share_by_email = function() {
 			// Add date
 			if ($(this).children('span.showdate').html() != '' && $(this).children('span.showdate').html() != null)
 				body += "%20(" + $(this).children('span.showdate').html() + ")";
-			
+
 			// Add note
 			if ($(this).children('span.note').html() != '')
 				body += "%0d%0a" + encodeURIComponent(Encoder.htmlDecode($(this).children('span.note').html())) + "%0d%0a";
 
 			body += "%0d%0a";
 		});
-		
+
 		Titanium.Desktop.openURL("mailto:?subject=" + name + "&body=" + body + "%0d%0a" + encodeURI(' I generated this list with my task tool Wunderlist from 6 Wunderkinder - Get it from http://www.6wunderkinder.com/wunderlist'));
 	}
 	else
@@ -81,14 +81,14 @@ share.share_with_cloudapp = function() {
 				new_task.push(parseInt($(this).children('span.timestamp').attr('rel')) + 86400);
 			else
 				new_task.push(0);
-			
+
 			// Add note
 			if ($(this).children('span.note').html() != '')
 				new_task.push($(this).children('span.note').html());
 
 			data['tasks'].push(new_task);
 		});
-		
+
 		// Generate CloudApp Link
 		$.ajax({
 			url     : 'http://cloudapp.wunderlist.net',
@@ -97,7 +97,7 @@ share.share_with_cloudapp = function() {
 			success : function(response_data, text, xhrobject)
 			{
 				var response = $.parseJSON(response_data);
-				
+
 				// Everything fine?
 				if (response.code == 100)
 				{
@@ -124,8 +124,8 @@ share.share_with_cloudapp = function() {
  */
 share.print = function() {
 	// NOTE: This is a workaround for printing - Titanium doesn't support window.print(), so we have to do it that way, still cool feature
-	
-	// Are they any tasks?	
+
+	// Are they any tasks?
 	if ($('ul.mainlist span.description').length > 0)
 	{
 		// Create the temporary printfile
@@ -141,28 +141,28 @@ share.print = function() {
 
 		// Build tasks HTML
 		var html_code = '';
-		
+
 		// Generate the print HTML data
 		$('ul.mainlist li').each(function() {
 			// If is normal list
 			html_code += '<li><span></span>' + $(this).children('span.description').html();
-								
+
 			// Add date
 			if ($(this).children('span.showdate').html() != '' && $(this).children('span.showdate').html() != null)
 				html_code += ' (<b>' + $(this).children('span.showdate').html() + '</b>)';
-			
+
 			// Add note
 			if ($(this).children('span.note').html() != '')
 				html_code += '<p>' + $(this).children('span.note').html().replace(/\n/g,'<br/>') + '</p>';
-			
+
 			html_code += '</li>';
 		});
-		
+
 		// Replace Tasks
 		template = template.replace(/####TASKS####/g, html_code);
 
 		file.write(template);
-		
+
 		if (settings.os === 'darwin')
 			var file_url = 'file://';
 		else
@@ -223,10 +223,10 @@ convert_timestamp_into_date = function(timestamp) {
 		var month = selected_date.getMonth() + 1; //January is 0!
 		var year  = selected_date.getFullYear();
 
-		if (day < 10) { 
+		if (day < 10) {
 			day = '0' + day;
 		}
-		if (month < 10)	{ 
+		if (month < 10)	{
 			month = '0' + month;
 		}
 

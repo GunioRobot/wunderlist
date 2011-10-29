@@ -11,7 +11,7 @@ task.insert = function(nohtml) {
 // UPDATE the database task object
 task.update = function(noVersion, callback) {
 	var returnValue = wunderlist.database.updateTask(noVersion);
-	
+
 	if (returnValue == true && callback != undefined)
 		callback();
 };
@@ -36,7 +36,7 @@ task.updateDone = function() {
 	if (task.id != undefined && task.id > 0 && task.done != undefined)
 	{
 		var liElement = $('li#' + task.id);
-		
+
 		if (task.done == 1)
 		{
 			liElement.addClass('done');
@@ -44,7 +44,7 @@ task.updateDone = function() {
 			// If it is not the search / filter site, create a done list at the bottom
 			if ($('ul.searchlist').length == 0 && $('ul.filterlist').length == 0)
 			{
-				if ($("ul#donelist_list_today").length == 0) 
+				if ($("ul#donelist_list_today").length == 0)
 				{
 					$("ul.mainlist").after("<h3 class='head_today'>" + wunderlist.language.data.done_today + "</h3>");
 					$("div#content h3.head_today").after("<ul id='donelist_list_today' class='donelist'></ul>");
@@ -58,8 +58,8 @@ task.updateDone = function() {
 			else if ($('ul.searchlist').length > 0)
 			{
 				// Get the last searched task
-				var lastLiElement = liElement.parent('ul.searchlist').find('li:last');				
-				
+				var lastLiElement = liElement.parent('ul.searchlist').find('li:last');
+
 				if (liElement.attr('id') != lastLiElement.attr('id'))
 				{
 					liElement.slideUp('fast', function() {
@@ -71,8 +71,8 @@ task.updateDone = function() {
 			else
 			{
 				// Get the last task
-				var lastLiElement = liElement.parent('ul.filterlist').find('li:last');				
-				
+				var lastLiElement = liElement.parent('ul.filterlist').find('li:last');
+
 				if (liElement.attr('id') != lastLiElement.attr('id'))
 				{
 					liElement.slideUp('fast', function() {
@@ -91,9 +91,9 @@ task.updateDone = function() {
 					liElement.parent().prev().remove();
 					liElement.parent().remove();
 				}
-				
+
 				liElement.remove();
-				
+
 				return;
 			}
 
@@ -102,21 +102,21 @@ task.updateDone = function() {
 				liElement.parent().prev().remove();
 				liElement.parent().remove();
 			}
-			
+
 			var ulElement = 'ul.mainlist';
-			
+
 			if ($('ul.filterlist').length > 0 || $('ul.searchlist').length > 0)
 			{
 				var parentElement = liElement.parent($('ul.filterlist').length > 0 ? 'ul.filterlist' : 'ul.searchlist');
-				
+
 				// Get the last task
 				var lastLiElement      = parentElement.find('li:last');
 				var firstDoneLiElement = parentElement.find('li.done:first');
 				var doneLiElementCount = parentElement.find('li.done').length;
-				
+
 				ulElement = $('ul.filterlist').length > 0 ? 'ul#filterlist' + liElement.attr('rel') : 'ul.searchlist';
 			}
-			
+
 			if (doneLiElementCount != undefined)
 			{
 				if (doneLiElementCount > 1)
@@ -141,7 +141,7 @@ task.updateDone = function() {
 						liElement.appendTo(ulElement).slideDown();
 				});
 			}
-						
+
 			liElement.removeClass('done');
 			html.make_timestamp_to_string();
 		}
@@ -158,7 +158,7 @@ task.updatePositions = function() {
     jQuery.eachAsync(tasks, {
         delay : 0,
         bulk  : 0,
-        loop  : function() {        
+        loop  : function() {
             task.id       = tasks.eq(i).attr("id");
             task.position = i + 1;
             task.list_id  = tasks.eq(i).attr('rel');
@@ -174,7 +174,7 @@ task.updateImportant = function() {
 	{
 		var taskElement = $('li#' + task.id);
 		var ulElement   = taskElement.parent('ul');
-		
+
 		if (task.important == 0)
 		{
 			// Get the last important task
@@ -194,9 +194,9 @@ task.updateImportant = function() {
 		{
 			// Get the first task
 			var item = ulElement.find('li:first');
-			
+
 			taskElement.children('span.favina').removeClass('favina').addClass('fav');
-			
+
 			if (ulElement.children('li').length > 1 && taskElement.attr('id') != item.attr('id'))
 			{
 				taskElement.slideUp('fast', function() {
@@ -214,9 +214,9 @@ task.updateList = function() {
 		var liElement = $('li#' + task.id);
 		var oldListId = liElement.attr('rel');
 		var newListId = task.list_id.toString();
-		
+
 		if (oldListId != task.list_id)
-		{			
+		{
 			if ($('ul.filterlist').length == 0)
 			{
 				liElement.remove();
@@ -224,7 +224,7 @@ task.updateList = function() {
 			else
 			{
 				var ulElement = $('ul#filterlist' + oldListId.toString());
-				
+
 				if (taskDroped == true)
 				{
 					if ($('ul#filterlist' + task.list_id).is('ul'))
@@ -239,28 +239,28 @@ task.updateList = function() {
 						{
 							setTimeout(function() {
 								liElement.appendTo('ul#filterlist' + newListId).slideDown();
-							}, 10);				
+							}, 10);
 						}
 					}
 					else
 					{
 						listHTML  = '<h3 class="clickable cursor" rel="' + task.list_id + '">' + $('a#list' + task.list_id + ' b').text() + '</h3>';
 						listHTML += '<ul id="filterlist' + task.list_id + '" rel="' + ulElement.attr('rel') + '" class="mainlist sortable filterlist"></ul>';
-						
+
 						$('div#content').append(listHTML);
-						
+
 						setTimeout(function() {
 							liElement.appendTo('ul#filterlist' + newListId).slideDown();
 						}, 10);
-						
+
 						makeSortable();
 					}
-						
+
 					taskDroped = false;
 				}
-				
+
 				setTimeout(function() {
-					var liCount = ulElement.children('li').length;				
+					var liCount = ulElement.children('li').length;
 					if (liCount == 0)
 					{
 						// Remove list headline title and the ul element
@@ -269,7 +269,7 @@ task.updateList = function() {
 					}
 				}, 10);
 			}
-			
+
 			liElement.attr('rel', task.list_id);
 		}
 	}
@@ -283,7 +283,7 @@ task.updateDeleted = function() {
 		var removeList = false;
 		var liElement  = $('li#' + task.id);
 		var ulElement  = liElement.parent('ul');
-		
+
 		if (ulElement.hasClass('filterlist'))
 		{
 			if (ulElement.children('li').length == 1 || ulElement.children('li').length == 0)
@@ -294,11 +294,11 @@ task.updateDeleted = function() {
 			if (ulElement.children('li').length == 1 && liElement.find('.checked').length == 1)
 				removeList = true;
 		}
-		
+
 		if (removeList == true)
 		{
 			var hElement = ulElement.prev();
-	
+
 			if (hElement.is('h3'))
 				hElement.remove();
 

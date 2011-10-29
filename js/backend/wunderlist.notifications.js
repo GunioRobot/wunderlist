@@ -2,7 +2,7 @@
  * wunderlist.notifications.js
  *
  * Class for handling notifications
- * 
+ *
  * @author Dennis Schneider
  */
 
@@ -10,7 +10,7 @@ wunderlist.notifications = wunderlist.notifications || {};
 
 /**
  * Initializes an notification object
- * 
+ *
  * @author Dennis Schneider
  */
 wunderlist.notifications.init = function()
@@ -20,7 +20,7 @@ wunderlist.notifications.init = function()
 
 /**
  * Creates a new notification
- * 
+ *
  * @author Dennis Schneider
  */
 wunderlist.notifications.createNotification = function(title, message)

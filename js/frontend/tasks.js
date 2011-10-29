@@ -13,58 +13,58 @@ tasks.add = function() {
 		// Add Task to List
 		list_id   = $("ul.mainlist").attr("rel");
 		task_name = wunderlist.database.convertString($("input.input-add").val());
-		
+
 		if (task_name != '')
 		{
 			timestamp = $(".add .showdate").attr('rel');
 
 			if (timestamp == undefined)
 				timestamp = 0;
-			
+
 			important = 0;
-			
+
 			if (isNaN(parseInt(list_id)) || $('#left a.active').length == 1)
 			{
 				var activeFilter = $('#left a.active');
-				
+
 				if (list_id == 'today' || activeFilter.attr('id') == 'today')
 					timestamp = html.getWorldWideDate();
 				else if (list_id == 'tomorrow' || activeFilter.attr('id') == 'tomorrow')
 					timestamp = html.getWorldWideDate() + 86400;
 				else if (list_id == 'starred' || activeFilter.attr('id') == 'starred')
 					important = 1;
-				
+
 				// On Filters set it to the inbox
 				list_id = 1;
 			}
-			
+
 			task.name      = task_name;
 			task.list_id   = list_id;
 			task.date      = timestamp;
 			task.important = important;
-			
-			var task_id  = task.insert();	
+
+			var task_id  = task.insert();
 			var taskHTML = html.generateTaskHTML(task_id, task_name, list_id, 0, important, timestamp);
-			
-			
+
+
 			if ($("ul.filterlist").length > 0 || $('#left a.active').length == 1)
 			{
 				var ulElement = $('ul#filterlist' + list_id);
-				
+
 				if (ulElement != undefined && ulElement.is('ul'))
 					ulElement.append(taskHTML);
 				else
 				{
 					listHTML  = '<h3 class="clickable cursor" rel="' + list_id + '">' + $('a#list' + list_id + ' b').text() + '</h3>';
 					listHTML += '<ul id="filterlist' + list_id + '" rel="' + ulElement.attr('rel') + '" class="mainlist sortable filterlist">' + taskHTML + '</ul>';
-					
+
 					$('div#content').append(listHTML);
 				}
 			}
 			else
 				$("ul.mainlist").append(taskHTML).find("li:last").hide().fadeIn(225);
 				html.createDatepicker();
-			
+
 			$("input.input-add").val('');
 			$(".add .showdate").remove();
 
@@ -72,7 +72,7 @@ tasks.add = function() {
 
 			// Reset DatePicker
 			$('.datepicker').val('');
-			
+
 			makeSortable();
 			filters.updateBadges();
 			html.make_timestamp_to_string();
@@ -92,10 +92,10 @@ tasks.edit = function() {
 
     var task_name = $('#task-edit').val();
 	var task_id   = $('#task-edit').parent().attr('id');
-	
+
 	$('#task-edit').parent().find('.description').html(wunderlist.replace_links(unescape(task_name))).show();
 	$('#task-edit').remove();
-	
+
 	task.id   = task_id;
 	task.name = wunderlist.database.convertString(task_name);
 	task.update();
@@ -127,7 +127,7 @@ tasks.cancel = function() {
  */
 tasks.deletes = function(deleteElement) {
 	var liElement = deleteElement.parent();
-	
+
 	task.id      = liElement.attr('id');
 	task.list_id = liElement.attr('rel');
 	task.deleted = 1;
@@ -141,7 +141,7 @@ $(function() {
 	$("div.add input").live('keyup', function(e) {
 		wunderlist.timer.pause();
 		var aimSetting = parseInt(Titanium.App.Properties.getString('add_item_method', '0'));
-		
+
 		// If not empty and Return gets pressed, new task will be added
 		if(e.keyCode == 13 && aimSetting == 0)
 		{
@@ -166,11 +166,11 @@ $(function() {
 			wunderlist.timer.resume();
   		}
 	});
-	
+
 	// DoubleClick on Task - Edit mode
     $('.mainlist li .description').live('dblclick', function() {
         var timestampElement = $(this).parent().children('span.timestamp');
-        
+
         var doneIsActive = ($('div#left a#done.active').length == 1);
 
 		// Check if edit mode has already been activated
@@ -196,8 +196,8 @@ $(function() {
 			tasks.totalFocusOut = false;
 		}
     });
-    
-    
+
+
     // Initiate The Datepicker when clicking an existing Date
     $('.mainlist li .showdate').live('click', function() {
     	var object  = $(this).parent();
@@ -205,14 +205,14 @@ $(function() {
     	dateInput   = $(this).parent().find(".datepicker");
 
     	description.after("<input type='hidden' class='datepicker'/>");
-		
+
     	html.createDatepicker();
-		
+
 		datePickerInput = $(this).parent().find(".datepicker");
 		datePickerImage = $(this).parent().find(".ui-datepicker-trigger");
-    	
+
     	datePickerImage.click().remove();
-    	
+
 		// This is the Friday night hack to remove the doubled datepicker
 		// :) Thank you ladies and gentlemen!
     	setTimeout(function() {
@@ -256,17 +256,17 @@ $(function() {
 		if($(this).val() == '')
 			wunderlist.timer.resume();
 	});
-	
+
 	// Do the check or uncheck a task magic
 	$('.checkboxcon').live('click', function(event) {
         if(tasks.checkClicked == false)
         {
             tasks.checkClicked = true;
-            
+
             $(this).toggleClass("checked");
 
             var is_checked = $(this).hasClass("checked");
-							
+
         	task.id      = $(this).parent().attr("id");
             task.list_id = $(this).parent().attr("rel").replace('list', '');
 
@@ -274,7 +274,7 @@ $(function() {
             if(is_checked)
             {
 				task.done      = 1;
-				task.done_date = html.getWorldWideDate();;	
+				task.done_date = html.getWorldWideDate();;
       		}
       		// If is already checked, append to upper list
             else
@@ -282,14 +282,14 @@ $(function() {
 				task.done      = 0;
 				task.done_date = 0;
            	}
-			
+
 			task.updateDone();
 			task.update();
          }
 
          setTimeout(function() { tasks.checkClicked = false; }, 100);
     });
-    
+
     // Make this task unimportant
     $("ul.mainlist span.fav").live("click", function() {
     	if($('a#done.active').length == 0)
@@ -314,7 +314,7 @@ $(function() {
 	        task.updatePositions();
 		}
     });
-    
+
     // Delete Button Mouse Over
 	$("ul.mainlist li, ul.donelist li").live('mouseover', function () {
 		var description  = $(this).find('span.description');

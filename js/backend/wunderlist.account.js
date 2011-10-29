@@ -63,9 +63,9 @@ wunderlist.account.createUser = function(email, password) {
 	Titanium.App.Properties.setString('logged_in', 'true');
 	Titanium.App.Properties.setString('email', email.toString());
 	Titanium.App.Properties.setString('password', password.toString());
-	
+
 	wunderlist.account.email = email;
-							
+
 	// Set the new app title, so the user can see which account is currently logged in
 	wunderlist.setTitle('Wunderlist - ' + email);
 };
@@ -142,18 +142,18 @@ wunderlist.account.load = function() {
  * @author Christian Reber, Dennis Schneider
  */
 wunderlist.account.loadInterface = function() {
-	if (register_dialog != undefined) 
+	if (register_dialog != undefined)
 	{
 		$(register_dialog).dialog('close');
 	}
-	
+
 	var taskInput = $("input.input-add").val();
-	
+
 	menu.initialize();
 	wunderlist.database.initLists(wunderlist.database.getLists());
 	filters.init();
 	openList();
-	
+
 	makeListsDropable();
 	makeFilterDropable();
 
@@ -162,7 +162,7 @@ wunderlist.account.loadInterface = function() {
 		// Stupid, but necessary workaround for Mac OS X
 		$('.input-add').focus().blur();
 	}
-	
+
 	if (taskInput != '')
 	{
 		$("input.input-add").val(taskInput);
@@ -196,7 +196,7 @@ wunderlist.account.showRegisterDialog = function() {
 					$('input#login-email').blur();
 				}
 		});
-	
+
 
 		dialogs.openDialog(register_dialog);
 	}
@@ -271,26 +271,26 @@ wunderlist.account.showRegisterDialog = function() {
  */
 wunderlist.account.validate = function(email, password) {
 	var valid = true;
-	
+
 	// Validate email
 	if (email == '' || email.toLowerCase() == 'email')
 	{
 		valid = false;
 		wunderlist.account.showEmailError(wunderlist.language.data.email_not_empty);
-	}	
+	}
 	else if (wunderlist.account.validateEmail(email) == false)
 	{
 		valid = false;
 		wunderlist.account.showEmailError(wunderlist.language.data.error_invalid_email);
 	}
-	
+
 	// Validate password
 	if (password == '' || password.toLowerCase() == 'password')
 	{
 		valid = false;
 		wunderlist.account.showPasswordError(wunderlist.language.data.password_not_empty);
 	}
-	
+
 	return valid;
 };
 
@@ -322,7 +322,7 @@ wunderlist.account.showForgotPasswordError = function(msg) {
  */
 wunderlist.account.showEmailError = function(msg) {
 	var pClass = '';
-	
+
 	if ($(".showlogindialog").is(':visible'))
 	{
 		pClass = '.showlogindialog ';
@@ -333,7 +333,7 @@ wunderlist.account.showEmailError = function(msg) {
 		pClass = '.showregisterdialog ';
 		$('input#register-email').addClass('input-red');
 	}
-	
+
 	$(pClass + 'p.error-email').hide().text('').fadeIn("fast").text(msg);
 };
 
@@ -344,7 +344,7 @@ wunderlist.account.showEmailError = function(msg) {
  */
 wunderlist.account.showPasswordError = function(msg) {
 	var pClass = '';
-	
+
 	if ($(".showlogindialog").is(':visible'))
 	{
 		pClass = '.showlogindialog ';
@@ -355,7 +355,7 @@ wunderlist.account.showPasswordError = function(msg) {
 		pClass = '.showregisterdialog ';
 		$('input#register-password').addClass('input-red');
 	}
-	
+
 	$(pClass + 'p.error-password').hide().text('').fadeIn("fast").text(msg);
 };
 
@@ -376,16 +376,16 @@ wunderlist.account.login = function() {
 		'offset'   : wunderlist.timer.getTimezoneOffset(),
 		'language' : navigator.language
 	};
-	
+
 	if (wunderlist.account.validate(data['email'], data['password']) == true)
 	{
 		var newsletter = $('input#login-newsletter').attr('checked');
-	
+
 		if (newsletter == true)
 			data['newsletter'] = 1;
-		
+
 		data['password'] = Titanium.Codec.digestToHex(Titanium.Codec.MD5, data['password']);
-		
+
 		Layout.startLoginAnimation();
 
 		$.ajax({
@@ -411,7 +411,7 @@ wunderlist.account.login = function() {
 
 							// Save user
 							wunderlist.account.createUser(data['email'], data['password']);
-							
+
 							// Synchronize data
 							$('#sync').click();
 
@@ -461,7 +461,7 @@ wunderlist.account.login = function() {
 							});
 							Layout.stopLoginAnimation();
 							dialogs.openDialog(create_user_dialog);
-							
+
 							break;
 
 						default:
@@ -490,7 +490,7 @@ wunderlist.account.forgotpw = function() {
 	var data = {'email' : $.trim($('input#forgotpw-email').val().toLowerCase())};
 
 	if (wunderlist.is_email(data['email']))
-	{	
+	{
 		$.ajax({
 			url     : this.forgotPasswordUrl,
 			type    : 'POST',
@@ -554,12 +554,12 @@ wunderlist.account.register = function(onlyRegister, registerOnLogin) {
 	{
 		onlyRegister = false;
 	}
-	
+
 	if (registerOnLogin == undefined)
 	{
 		registerOnLogin = false;
 	}
-	
+
 	var data = {
 		'email'    : (registerOnLogin == true) ? $.trim($('input#login-email').val().toLowerCase()) : $.trim($('input#register-email').val().toLowerCase()),
 		'password' : (registerOnLogin == true) ? $.trim($('input#login-password').val()) : $.trim($('input#register-password').val()),
@@ -572,12 +572,12 @@ wunderlist.account.register = function(onlyRegister, registerOnLogin) {
 	if (wunderlist.account.validate(data['email'], data['password']) == true)
 	{
 		var newsletter = $('input#register-newsletter').attr('checked');
-	
+
 		if (newsletter == true)
 			data['newsletter'] = 1;
-		
+
 		data['password'] = Titanium.Codec.digestToHex(Titanium.Codec.MD5, data['password']);
-		
+
 		Layout.startLoginAnimation();
 
 		$.ajax({
@@ -720,12 +720,12 @@ wunderlist.account.editProfile = function() {
  */
 wunderlist.account.change_profile_data = function() {
 	var user_credentials = wunderlist.account.getUserCredentials();
-	
+
 	var data = {
 		'email'    : user_credentials['email'],
 		'password' : user_credentials['password']
 	};
-	
+
 	// Does the user wants to save a new email address?
 	new_email_address = $('input#new_email').val().toLowerCase();
 	if (new_email_address != '')
@@ -763,7 +763,7 @@ wunderlist.account.change_profile_data = function() {
 			url     : this.editAccountUrl,
 			type    : 'POST',
 			data    : data,
-			timeout : settings.REQUEST_TIMEOUT,			
+			timeout : settings.REQUEST_TIMEOUT,
 			success : function(response_data, text, xhrobject) {
 				if(xhrobject.status == 0)
 					dialogs.showErrorDialog(wunderlist.language.data.no_internet);
@@ -886,24 +886,24 @@ wunderlist.account.deleteAccount = function() {
 wunderlist.account.delete_account_data = function() {
 	var valid = true;
 	var ucs   = wunderlist.account.getUserCredentials();
-	
+
 	var data = {
 		'email'    : $.trim($('input#delete_email').val().toLowerCase()),
 		'password' : Titanium.Codec.digestToHex(Titanium.Codec.MD5, $.trim($('input#delete_password').val()))
 	};
-	
+
 	if (ucs['email'] != data['email'])
 		valid = false;
 	if (ucs['password'] != data['password'])
 		valid = false;
-	
+
 	if(valid == true)
 	{
 		$.ajax({
 			url     : this.deleteAccountUrl,
 			type    : 'POST',
 			data    : data,
-			timeout : settings.REQUEST_TIMEOUT,			
+			timeout : settings.REQUEST_TIMEOUT,
 			success : function(response_data, text, xhrobject) {
 				if (xhrobject.status == 0)
 				{
@@ -918,7 +918,7 @@ wunderlist.account.delete_account_data = function() {
 						case wunderlist.account.status_codes.DELETE_ACCOUNT_SUCCESS:
 							dialogs.closeDialog(delete_account_dialog);
 							wunderlist.account.logout();
-							dialogs.showConfirmationDialog();							
+							dialogs.showConfirmationDialog();
 							break;
 
 						case wunderlist.account.status_codes.DELETE_ACCOUNT_NOT_EXISTS:
@@ -959,7 +959,7 @@ wunderlist.account.logout = function() {
 	if (wunderlist.sync.isSyncing == false)
 	{
 		wunderlist.setTitle('Wunderlist');
-		
+
 		// Remove all user data
 		wunderlist.database.truncate();
 		wunderlist.account.logUserOut();
@@ -969,9 +969,9 @@ wunderlist.account.logout = function() {
 		$('#content').html('');
 		$('#lists a.list').remove();
 		menu.remove();
-		
+
 		dialogs.closeEveryone();
-		
+
 		// Show register Dialog
 		wunderlist.account.showRegisterDialog();
 		Titanium.UI.setBadge(null);
@@ -991,21 +991,21 @@ wunderlist.account.showInviteDialog = function() {
 	if ($("[role='dialog']").length == 0)
 	{
 		var inviteEventListener = 0;
-	
+
 		invite_dialog = dialogs.generateDialog(wunderlist.language.data.invite, html.generateSocialDialogHTML(), 'dialog-social');
 		dialogs.openDialog(invite_dialog);
-	
+
 		$('.ui-widget-overlay').removeClass('ui-widget-overlay-wood');
-	
+
 		$('div#invitebox input#send_invitation').live('click', function(){
 			input = $('div#invitebox input#email');
-	
+
 			if(input.val() != wunderlist.language.data.invite_email && wunderlist.account.validateEmail(input.val()))
 				wunderlist.account.invite();
 			else
 				input.select();
 		});
-	
+
 		// Invite on RETURN and close dialog on ESCAPE
 		$('div#invitebox input#email').live('keyup', function(evt) {
 			if (evt.keyCode == 13)
@@ -1017,19 +1017,19 @@ wunderlist.account.showInviteDialog = function() {
 					else
 						$(this).select();
 				}
-	
+
 				inviteEventListener++;
-	
+
 				setTimeout(function() {inviteEventListener = 0}, 100);
 			}
 		});
-	
+
 		// Fill on blur, if empty
 		$('div#invitebox input#email').live('blur', function() {
 			if ($(this).val() == '')
 				$(this).val(wunderlist.language.data.invite_email);
 		});
-	
+
 		// Clear on focus
 		$('div#invitebox input#email').live('focus', function() {
 			if ($(this).val() == wunderlist.language.data.invite_email)
@@ -1046,13 +1046,13 @@ wunderlist.account.showInviteDialog = function() {
 wunderlist.account.invite = function() {
 	var valid = true;
 	var ucs   = wunderlist.account.getUserCredentials();
-	
+
 	var data  = {
 		'email'        : ucs['email'],
 		'invite_email' : $.trim($('div#invitebox input#email').val().toLowerCase()),
 		'invite_text'  : $.trim($('textarea#invite-text').val())
 	};
-	
+
 	if (data['invite_email'] == '' || data['invite_email'] == undefined)
 		valid = false;
 	if (data['invite_text'] == '' || data['invite_text'] == undefined)
@@ -1064,7 +1064,7 @@ wunderlist.account.invite = function() {
 			url     : this.inviteUrl,
 			type    : 'POST',
 			data    : data,
-			timeout : settings.REQUEST_TIMEOUT,			
+			timeout : settings.REQUEST_TIMEOUT,
 			success : function(response_data, text, xhrobject) {
 				if (xhrobject.status == 0)
 				{
@@ -1079,7 +1079,7 @@ wunderlist.account.invite = function() {
 						case wunderlist.account.status_codes.INVITE_SUCCESS:
 
 							settings.save_invited('true');
-							
+
 							if ($("[role='dialog']").length == 1)
 							{
 								var buttonOptions = {};
@@ -1089,7 +1089,7 @@ wunderlist.account.invite = function() {
 									dialogs.closeDialog(invite_dialog);
 								};
 								buttonOptions[wunderlist.language.data.invite_more] = function() { $(this).dialog('close'); input.select();	};
-	
+
 								inviteCloseDialog = $('<div></div>').dialog({
 									autoOpen      : false,
 									draggable     : false,
@@ -1099,7 +1099,7 @@ wunderlist.account.invite = function() {
 									title         : wunderlist.language.data.invitation_success,
 									buttons       : buttonOptions
 								});
-	
+
 								dialogs.openDialog(inviteCloseDialog);
 							}
 
@@ -1155,7 +1155,7 @@ wunderlist.account.showInviteOKDialog = function(title) {
 			}
 		}
 	});
-		
+
 	dialogs.openDialog(wunderlist.account.inviteOKDialog);
 };
 
